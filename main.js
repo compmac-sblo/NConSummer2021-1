@@ -15,7 +15,7 @@ worker.addEventListener('message', function(e) {
 }, false);
 
 worker.postMessage('Hello World');
-
+worker.postMessage({ 'cmd': 'TEST', 'msg': 'msg' });
 
 
 if (!window.indexedDB) {
