@@ -7,6 +7,17 @@ test.test2();
 test.test3();
 test.test4();
 
+console.log("worker");
+const worker = new Worker('WorkerTest.js');
+
+worker.addEventListener('message', function(e) {
+  console.log('Worker said: ', e.data);
+}, false);
+
+worker.postMessage('Hello World');
+
+
+
 if (!window.indexedDB) {
   window.console.log("このブラウザーは安定版の IndexedDB を対応していません。IndexedDB の機能は利用できません。");
 }
