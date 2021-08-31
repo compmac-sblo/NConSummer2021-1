@@ -1,0 +1,10 @@
+.print_pages{
+  /*A4縦*/
+    width: 172mm;
+    height: 251mm;
+    page-break-after: always;
+}
+  /*最後のページは改ページを入れない*/
+.print_pages:last-child{
+    page-break-after: auto;
+}
