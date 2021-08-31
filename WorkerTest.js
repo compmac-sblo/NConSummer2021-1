@@ -61,7 +61,7 @@ self.addEventListener('message', function(e) {
       // 接続に成功したら
       request.onsuccess = function(event){
         const db = event.target.result;
-
+        // データの挿入(上書きは出来ない)
         const customerObjectStore = db.transaction("customers", "readwrite").objectStore("customers");
           customerData.forEach(function(customer) {
             self.postMessage({'cmd': 'customer', 'msg': customer});

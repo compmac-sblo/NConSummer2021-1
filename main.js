@@ -56,5 +56,3 @@ worker.addEventListener('message', function(e) {
       break;
   }
 }, false);
-
-//worker.postMessage({ 'cmd': 'TEST', 'msg': 'TESTmsg' });
