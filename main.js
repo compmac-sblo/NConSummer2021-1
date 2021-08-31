@@ -1,5 +1,5 @@
 // Moduleの読込
-import * as test from './ModuleTest1.js'
+import * as test from './Module/ModuleTest1.js'
 
 
 console.log("test");
@@ -8,13 +8,15 @@ test.test2();
 test.test3();
 test.test4();
 
+let DBName ="the_name";
+
 // indexedDBが使用出来るかどうかの確認
 if (!window.indexedDB) {
   window.console.log("このブラウザーは安定版の IndexedDB を対応していません。IndexedDB の機能は利用できません。");
 }
 
 // DataBase操作を別スレッドに移す為にWorkerを作成
-const worker = new Worker('WorkerTest.js');
+const worker = new Worker('./Module/WorkerTest.js');
 
 // 顧客データがどのようなものかを示します
 const customerData = [
@@ -28,9 +30,9 @@ const customerData2 = [
 
 
 // データをDataBaseに保存
-worker.postMessage({'cmd': 'DB', 'msg': customerData});
-worker.postMessage({'cmd': 'DB2', 'msg': customerData});
-worker.postMessage({'cmd': 'DB2', 'msg': customerData2});
+worker.postMessage({'cmd': 'CREATE', 'name': DBName, 'msg': ''});
+worker.postMessage({'cmd': 'ADD', 'name': DBName, 'msg': customerData});
+worker.postMessage({'cmd': 'ADD', 'name': DBName, 'msg': customerData2});
 
 // Workerから戻って来たものを分類と実行
 worker.addEventListener('message', function(e) {
