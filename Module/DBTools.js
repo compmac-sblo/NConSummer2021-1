@@ -1,3 +1,11 @@
+// createDataBase(request, customerData)
+// addData(request, customerData)
+// readData(request)
+
+
+
+
+
 function createDataBase(request, customerData) {
   request.addEventListener('upgradeneeded', function(event) {
       
@@ -39,7 +47,8 @@ function addData(request, customerData) {
   request.addEventListener('success', function(event){
     const db = event.target.result;
     // データの挿入(上書きは出来ない)
-    const customerObjectStore = db.transaction("customers", "readwrite").objectStore("customers");
+    const customerObjectStore = db.transaction("customers", "readwrite")
+                                  .objectStore("customers");
       customerData.forEach(function(customer) {
         self.postMessage({'cmd': 'customer', 'msg': customer});
         customerObjectStore.add(customer);
@@ -49,4 +58,28 @@ function addData(request, customerData) {
     }
   );
 }
-//export {addData};
+
+
+
+function readData(request) {
+  request.addEventListener('success', function(event){
+    const db = event.target.result;
+    // データの挿入(上書きは出来ない)
+    const customerObjectStore = db.transaction("customers", "readonly")
+                                  .objectStore("customers");
+    customerObjectStore.openCursor()
+                        .addEventListener('success', function (event) {
+      const cursor = event.target.result;
+      if (cursor) {
+        self.postMessage({'cmd': 'read', 'msg': [cursor.key, cursor.value.name]});
+        cursor.continue();
+      } else {
+
+      }
+    });
+    
+      db.close();
+      self.postMessage({'cmd': 'success', 'msg': 'データの保存成功'});
+    }
+  );
+}

@@ -29,10 +29,13 @@ const customerData2 = [
 ];
 
 
-// データをDataBaseに保存
+// DataBaseにストアを作成
 worker.postMessage({'cmd': 'CREATE', 'name': DBName, 'msg': ''});
+// データをDataBaseに保存
 worker.postMessage({'cmd': 'ADD', 'name': DBName, 'msg': customerData});
 worker.postMessage({'cmd': 'ADD', 'name': DBName, 'msg': customerData2});
+// // データをDataBaseから取得
+worker.postMessage({'cmd': 'READ', 'name': DBName, 'msg': ''});
 
 // Workerから戻って来たものを分類と実行
 worker.addEventListener('message', function(e) {
@@ -53,6 +56,9 @@ worker.addEventListener('message', function(e) {
       break;
     case 'customer':
       console.log(e.data.msg);
+      break;
+    case 'read':
+      console.log("読出し:" + e.data.msg);
       break;
     default:
       break;

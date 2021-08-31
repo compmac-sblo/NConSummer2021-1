@@ -14,10 +14,10 @@ self.addEventListener('message', function(e) {
   let request = indexedDB.open(dbName, 2);
 
   // DBの作成に失敗した場合
-  request.onerror = function(event) {
+  request.addEventListener('error', function(event) {
     // エラー処理
     self.postMessage({'cmd': 'error', 'msg': 'データベースの作成・接続に失敗'});
-    };
+    });
 
   switch (cmd) {
     case "TEST":
@@ -30,8 +30,12 @@ self.addEventListener('message', function(e) {
       
       break;
     case "ADD":
-      // 接続に成功したら
+      // データの追加
       addData(request, customerData);
+      break;
+    case "READ":
+      // データの読出し
+      readData(request);
       break;
     default:
       break;
