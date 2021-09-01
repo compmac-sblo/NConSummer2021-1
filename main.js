@@ -8,6 +8,7 @@ test.test2();
 test.test3();
 test.test4();
 
+// DataBaseの名前
 let DBName ="the_name";
 
 // indexedDBが使用出来るかどうかの確認
@@ -64,3 +65,27 @@ worker.addEventListener('message', function(e) {
       break;
   }
 }, false);
+
+self.addEventListener('keydown', function (e) {
+  if (e.key === 'Enter') {
+    console.log("Enterが押されました");
+    // DBに追記
+    worker.postMessage({'cmd': 'ADD', 'name': DBName, 'msg': customerData2});
+
+  }
+  
+})
+
+const button = document.getElementById("button");
+
+button.addEventListener('click', function (e) {
+  console.log(button.value);
+//  switch (e.value) {
+//    case value:
+//      
+//      break;
+//  
+//    default:
+//      break;
+//  }
+});
