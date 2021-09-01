@@ -66,15 +66,28 @@ worker.addEventListener('message', function(e) {
   }
 }, false);
 
-self.addEventListener('keydown', function (e) {
+
+// 最後の欄でEnterを押すと仕訳をDBに追記
+const enter = document.getElementById("remarksColumn");
+
+enter.addEventListener('keydown', function (e) {
   if (e.key === 'Enter') {
     console.log("Enterが押されました");
+    const name = document.getElementsByName("journalEntry");
+    console.log(name);
+    const test = parseInt(name[0].value);
+    console.log(test);
+    if (isNaN(test)) {
+      console.log("数値以外");
+      return ;
+    }
+    console.log("続く");
     // DBに追記
-    worker.postMessage({'cmd': 'ADD', 'name': DBName, 'msg': customerData2});
+    //worker.postMessage({'cmd': 'ADD', 'name': DBName, 'msg': customerData2});
 
   }
   
-})
+});
 
 const button = document.getElementById("button");
 
