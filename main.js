@@ -17,7 +17,7 @@ if (!window.indexedDB) {
 }
 
 // DataBase操作を別スレッドに移す為にWorkerを作成
-const worker = new Worker('./Module/WorkerTest.js');
+const worker = new Worker('./Module/DBWorker.js');
 
 // 顧客データがどのようなものかを示します
 const journal = [
@@ -91,7 +91,7 @@ enter.addEventListener('keydown', function (e) {
 //      return ;
 //    }
     
-    // idNumを数値変換
+    // 数値変換
     for(let i = 2; i <= 5; i++){
     const num = parseInt(name[i].value);
     console.log(num);
