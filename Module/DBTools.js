@@ -1,37 +1,36 @@
-// createDataBase(request, customerData)
-// addData(request, customerData)
+// createDataBase(request, journal)
+// addData(request, journal)
 // readData(request)
 
 
 
 
 
-function createDataBase(request, customerData) {
+function createDataBase(request, journal) {
   request.addEventListener('upgradeneeded', function(event) {
       
     self.postMessage({'cmd': 'success', 'msg': 'DB作成成功'});
-    self.postMessage({'cmd': 'success', 'msg': customerData});
+    self.postMessage({'cmd': 'success', 'msg': journal});
     const db = event.target.result;
     
-    // 顧客の情報を保存する objectStore を作成します。
-    // "ssn" は一意であることが保証されていますので、キーパスとして使用します。
-    // あるいは少なくとも、キックオフミーティングで言われたことです。
-    const objectStore = db.createObjectStore("customers", { keyPath: "ssn" });
+    // 情報を保存する objectStore を作成します。
+    // "idNum" は一意であることが保証されていますので、キーパスとして使用します。
+    const objectStore = db.createObjectStore("customers", { keyPath: "idNum" });
   
-    // 顧客を名前で検索するためのインデックスを作成します。
+    // 借方を名前で検索するためのインデックスを作成します。
     // 重複する可能性がありますので、一意のインデックスとしては使用できません。
-    objectStore.createIndex("name", "name", { unique: false });
+    objectStore.createIndex("Dr", "Dr", { unique: false });
   
-    // 顧客をメールアドレスで検索するためのインデックスを作成します。2 人の顧客が同じメールアドレスを
+    // 貸方をメールアドレスで検索するためのインデックスを作成します。2 人の顧客が同じメールアドレスを
     // 使用しないようにしたいので、一意のインデックスを使用します。
-    objectStore.createIndex("email", "email", { unique: true });
+    objectStore.createIndex("Cr", "Cr", { unique: true });
   
     // データを追加する前に objectStore の作成を完了させるため、
     // transaction oncomplete を使用します。
 //        objectStore.transaction.oncomplete = function(event) {
       // 新たに作成した objectStore に値を保存します。
 //          const customerObjectStore = db.transaction("customers", "readwrite").objectStore("customers");
-//          customerData.forEach(function(customer) {
+//          journal.forEach(function(customer) {
 //            self.postMessage({'cmd': 'customer', 'msg': customer});
 //            customerObjectStore.add(customer);
 //          });
@@ -43,13 +42,13 @@ function createDataBase(request, customerData) {
 
 
 
-function addData(request, customerData) {
+function addData(request, journal) {
   request.addEventListener('success', function(event){
     const db = event.target.result;
     // データの挿入(上書きは出来ない)
     const customerObjectStore = db.transaction("customers", "readwrite")
                                   .objectStore("customers");
-      customerData.forEach(function(customer) {
+      journal.forEach(function(customer) {
         self.postMessage({'cmd': 'customer', 'msg': customer});
         customerObjectStore.add(customer);
       });

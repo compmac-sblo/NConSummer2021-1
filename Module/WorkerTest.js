@@ -9,7 +9,7 @@ self.addEventListener('message', function(e) {
   // DBの名前
   const dbName = e.data.name;
   // 受取ったDataを変数に格納
-  const customerData = e.data.msg;
+  const journal = e.data.msg;
   // DBに接続、または無い場合には新規作成
   let request = indexedDB.open(dbName, 2);
 
@@ -26,12 +26,12 @@ self.addEventListener('message', function(e) {
     case "CREATE":
       
       // DB作成成功後の処理
-      createDataBase(request, customerData);
+      createDataBase(request, journal);
       
       break;
     case "ADD":
       // データの追加
-      addData(request, customerData);
+      addData(request, journal);
       break;
     case "READ":
       // データの読出し

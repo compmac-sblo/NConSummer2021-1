@@ -20,21 +20,21 @@ if (!window.indexedDB) {
 const worker = new Worker('./Module/WorkerTest.js');
 
 // 顧客データがどのようなものかを示します
-const customerData = [
-  { ssn: "444-44-4444", name: "Bill", age: 35, email: "bill@company.com" },
-  { ssn: "555-55-5555", name: "Donna", age: 32, email: "donna@home.org" }
+const journal = [
+  { idNum: 1, date: "2021/09/01", Dr: 111, DrAmount: 1000000, Cr: 900, CrAmount: 1000000, remarksColumn: "現金"},
+  { idNum: 2, date: "2021/09/02", Dr: 200, DrAmount: 1000000, Cr: 111, CrAmount: 1000000, remarksColumn: "預入"}
 ];
-const customerData2 = [
-  { ssn: "666-44-4444", name: "Any", age: 35, email: "any@company.com" },
-  { ssn: "777-55-5555", name: "June", age: 32, email: "june@home.org" }
+const journal2 = [
+  { idNum: 3, date: "2021/09/03", Dr: 300, DrAmount: 1000000, Cr: 500, CrAmount: 1000000, remarksColumn: "そのた"},
+  { idNum: 4, date: "2021/09/04", Dr: 400, DrAmount: 1000000, Cr: 611, CrAmount: 1000000, remarksColumn: "hoge"}
 ];
 
 
 // DataBaseにストアを作成
 worker.postMessage({'cmd': 'CREATE', 'name': DBName, 'msg': ''});
 // データをDataBaseに保存
-worker.postMessage({'cmd': 'ADD', 'name': DBName, 'msg': customerData});
-worker.postMessage({'cmd': 'ADD', 'name': DBName, 'msg': customerData2});
+worker.postMessage({'cmd': 'ADD', 'name': DBName, 'msg': journal});
+worker.postMessage({'cmd': 'ADD', 'name': DBName, 'msg': journal2});
 // // データをDataBaseから取得
 worker.postMessage({'cmd': 'READ', 'name': DBName, 'msg': ''});
 
@@ -75,15 +75,26 @@ enter.addEventListener('keydown', function (e) {
     console.log("Enterが押されました");
     const name = document.getElementsByName("journalEntry");
     console.log(name);
-    const test = parseInt(name[0].value);
-    console.log(test);
-    if (isNaN(test)) {
-      console.log("数値以外");
+
+    // idNumを数値変換
+    const idNum = parseInt(name[0].value);
+    console.log(idNum);
+    if (Number.isNaN(idNum)) {
+      console.log("数値以外が入っています");
       return ;
     }
+    // dateをDateにobj変換
+    const data = new Date(name[1].value);
+    console.log(data);
+    if (!(date instanceof Date)) {
+      console.log("日付が不正です");
+      return ;
+    }
+
+
     console.log("続く");
     // DBに追記
-    //worker.postMessage({'cmd': 'ADD', 'name': DBName, 'msg': customerData2});
+    //worker.postMessage({'cmd': 'ADD', 'name': DBName, 'msg': journal2});
 
   }
   
