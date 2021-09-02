@@ -80,16 +80,25 @@ enter.addEventListener('keydown', function (e) {
     const idNum = parseInt(name[0].value);
     console.log(idNum);
     if (Number.isNaN(idNum)) {
-      console.log("数値以外が入っています");
+      console.log(name[0].id + "に数値以外が入っています");
       return ;
     }
     // dateをDateにobj変換
     const data = new Date(name[1].value);
     console.log(data);
-    if (!(date instanceof Date)) {
-      console.log("日付が不正です");
+//    if (!(date instanceof Date)) {
+//      console.log("日付が不正です");
+//      return ;
+//    }
+    
+    // idNumを数値変換
+    for(let i = 2; i <= 5; i++){
+    const num = parseInt(name[i].value);
+    console.log(num);
+    if (Number.isNaN(num)) {
+      console.log(name[i].id + "に数値以外が入っています");
       return ;
-    }
+    }}
 
 
     console.log("続く");
