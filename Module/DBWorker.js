@@ -34,6 +34,10 @@ self.addEventListener('message', function(e) {
   
   request.addEventListener('success', function (event) {
     const db = event.target.result;
+    function objectStore(db, params) {
+      return db.transaction("accountBook", params)
+                .objectStore("accountBook");
+    }
     switch (cmd) {
       case "TEST":
         self.postMessage({'cmd': 'TEST', 'msg': e.data.msg});
@@ -50,22 +54,23 @@ self.addEventListener('message', function(e) {
       case "ADD":
         // データの追加
         self.postMessage({'cmd': 'success', 'msg': 'データの追加開始'});
-        addData(db, journal);
+        addData(objectStore(db, "readwrite"), journal);
         break;
       case "PUT":
         // データの上書き更新
-        putData(db, journal);
+        putData(objectStore(db, "readwrite"), journal);
         break;
       case "FIND":
         // データを探す
-        searchData(db, journal);
+        searchData(objectStore(db, "readonly"), journal);
         break;
       case "READ":
         // データの読出し
-        readData(db);
+        readData(objectStore(db, "readonly"));
         break;
       default:
         break;
     }
+    db.close();
   });
 }, false);

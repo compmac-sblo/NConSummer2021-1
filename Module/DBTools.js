@@ -32,10 +32,9 @@ function createDataBaseObjectStore(request, journal, keyPath, indexArray, db) {
 
 
 
-function addData(db, journal) {
+function addData(objectStore, journal) {
   // データの挿入(上書きは出来ない)
-  const ObjectStore = db.transaction("accountBook", "readwrite")
-                        .objectStore("accountBook");
+  const ObjectStore = objectStore;
   journal.forEach(function(journals) {
     console.log(journals);
     self.postMessage({'cmd': 'add', 'msg': journals});
@@ -48,13 +47,11 @@ function addData(db, journal) {
       console.log('データベースに追記成功');
     });
   });
-  db.close();
 }
 
-function putData(db, journal) {
+function putData(objectStore, journal) {
   // データの更新
-  const ObjectStore = db.transaction("accountBook", "readwrite")
-                        .objectStore("accountBook");
+  const ObjectStore = objectStore;
   console.log(journal[0].idNum);
   const request = ObjectStore.get(journal[0].idNum);
   request.addEventListener('error', function (e) {
@@ -67,7 +64,6 @@ function putData(db, journal) {
       console.log("更新が成功");
     });
   });
-  db.close();
 }
 
 function searchData(db, journal) {
@@ -75,11 +71,10 @@ function searchData(db, journal) {
 }
 
 
-function readData(db) {
+function readData(objectStore) {
   // データの挿入(上書きは出来ない)
-  const customerObjectStore = db.transaction("accountBook", "readonly")
-                                .objectStore("accountBook");
-  customerObjectStore.openCursor()
+  const ObjectStore = objectStore;
+  ObjectStore.openCursor()
                       .addEventListener('success', function (event) {
     const cursor = event.target.result;
     if (cursor) {
@@ -88,6 +83,5 @@ function readData(db) {
     } else {
     }
   });
-  db.close();
   console.log('データベースに保存成功');
 }
