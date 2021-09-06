@@ -33,7 +33,7 @@ function createDataBaseObjectStore(request, journal, keyPath, indexArray, db) {
 
 
 function addData(objectStore, journal) {
-  // データの挿入(上書きは出来ない)
+  // データの追記(上書きは出来ない)
   const ObjectStore = objectStore;
   journal.forEach(function(journals) {
     console.log(journals);
@@ -72,7 +72,6 @@ function searchData(db, journal) {
 
 
 function readData(objectStore) {
-  // データの挿入(上書きは出来ない)
   const ObjectStore = objectStore;
   ObjectStore.openCursor()
                       .addEventListener('success', function (event) {
