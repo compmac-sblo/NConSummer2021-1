@@ -7,14 +7,28 @@
   <script type="Module" src="./main.js"></script>
 </head>
 <body>
-  <input type="text" size="12" name="journalEntry" id="idNum">
-  <input type="text" size="12" name="journalEntry" id="date">
-  <input type="text" size="12" name="journalEntry" id="Dr">
+  <input type="text" size="5" name="journalEntry" id="idNum">
+  <input type="text" size="10" name="journalEntry" id="date">
+  <input type="text" size="3" name="journalEntry" id="DrCode">
+  <input type="text" size="12" id="DrAccountsTitle" readonly>
   <input type="text" size="12" name="journalEntry" id="DrAmount">
-  <input type="text" size="12" name="journalEntry" id="Cr">
+  <input type="text" size="3" name="journalEntry" id="CrCode">
+  <input type="text" size="12" id="CrAccountsTitle" readonly>
   <input type="text" size="12" name="journalEntry" id="CrAmount">
   <input type="text" size="12" name="journalEntry" id="remarksColumn">
-  <br>
-  <input type="button" value="読込" id="button">
+  <br><br>
+  <input type="text" size="5" name="findJournalEntry" id="findIdNum">
+  <input type="text" size="10" name="findJournalEntry" id="findDate">
+  <input type="text" size="3" name="findJournalEntry" id="findDrCode">
+  <input type="text" size="12" id="findDrAccountsTitle" readonly>
+  <input type="text" size="12" name="findJournalEntry" id="findDrAmount">
+  <input type="text" size="3" name="findJournalEntry" id="findCrCode">
+  <input type="text" size="12" id="findCrAccountsTitle" readonly>
+  <input type="text" size="12" name="findJournalEntry" id="findCrAmount">
+  <input type="text" size="12" name="findJournalEntry" id="findRemarksColumn">
+  <input type="button" value="検索" id="find">
+
+  <input type="button" value="読込" id="read">
+
 </body>
 </html>

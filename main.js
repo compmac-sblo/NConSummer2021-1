@@ -35,7 +35,7 @@ const journal4 = [
   { idNum: 3, date: "2021/09/03", DrCode: 310, DrAmount: 100000, CrCode: 500, CrAmount: 100000, remarksColumn: "そのた"},
 ];
 // DataBaseにストアを作成
-worker.postMessage({'cmd': 'CREATE', 'name': DBName, 'msg': 'DataBaseにストアを作成'});
+//worker.postMessage({'cmd': 'CREATE', 'name': DBName, 'msg': 'DataBaseにストアを作成'});
 // DataBaseにデータを追記
 worker.postMessage({'cmd': 'ADD', 'name': DBName, 'msg': journal});
 worker.postMessage({'cmd': 'ADD', 'name': DBName, 'msg': journal2});
@@ -117,7 +117,7 @@ enter.addEventListener('keydown', function (e) {
   
 });
 
-const button = document.getElementById("button");
+const button = document.getElementById("read");
 
 button.addEventListener('click', function (e) {
   console.log(button.value);
