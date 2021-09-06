@@ -19,14 +19,14 @@ if (!window.indexedDB) {
 // DataBase操作を別スレッドに移す為にWorkerを作成
 const worker = new Worker('./Module/DBWorker.js');
 
-// 顧客データがどのようなものかを示します
+// 仕訳データがどのようなものかを示します
 const journal = [
-  { idNum: 1, date: "2021/09/01", Dr: 111, DrAmount: 1000000, Cr: 900, CrAmount: 1000000, remarksColumn: "現金"},
-  { idNum: 2, date: "2021/09/02", Dr: 200, DrAmount: 1000000, Cr: 111, CrAmount: 1000000, remarksColumn: "預入"}
+  { idNum: 1, date: "2021/09/01", DrCode: 111, DrAmount: 1000000, CrCode: 900, CrAmount: 1000000, remarksColumn: "現金"},
+  { idNum: 2, date: "2021/09/02", DrCode: 200, DrAmount: 1000000, CrCode: 111, CrAmount: 1000000, remarksColumn: "預入"}
 ];
 const journal2 = [
-  { idNum: 3, date: "2021/09/03", Dr: 300, DrAmount: 1000000, Cr: 500, CrAmount: 1000000, remarksColumn: "そのた"},
-  { idNum: 4, date: "2021/09/04", Dr: 400, DrAmount: 1000000, Cr: 611, CrAmount: 1000000, remarksColumn: "hoge"}
+  { idNum: 3, date: "2021/09/03", DrCode: 300, DrAmount: 1000000, CrCode: 500, CrAmount: 1000000, remarksColumn: "そのた"},
+  { idNum: 4, date: "2021/09/04", DrCode: 400, DrAmount: 1000000, CrCode: 611, CrAmount: 1000000, remarksColumn: "hoge"}
 ];
 
 
@@ -86,7 +86,7 @@ enter.addEventListener('keydown', function (e) {
     // dateをDateにobj変換
     const data = new Date(name[1].value);
     console.log(data);
-//    if (!(date instanceof Date)) {
+//    if (!(date typeof Date)) {
 //      console.log("日付が不正です");
 //      return ;
 //    }

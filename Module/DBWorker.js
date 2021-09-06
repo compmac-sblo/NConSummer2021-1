@@ -26,7 +26,10 @@ self.addEventListener('message', function(e) {
     case "CREATE":
       
       // DB作成成功後の処理
-      createDataBase(request, journal);
+      //KeyPathと検索用のindexを設定
+      const indexArray = ["idNum", "date", "DrCode", "DrAmount", "CrCode", "CrAmount", "remarksColumn"];
+      const KeyPath = "idNum";
+      createDataBase(request, journal, KeyPath, indexArray);
       
       break;
     case "ADD":
