@@ -3,7 +3,7 @@ importScripts('DBTools.js');
 
 // main.jsからのpostMessageを受取る
 self.addEventListener('message', function(e) {
-  let cmd = e.data.cmd;
+  const cmd = e.data.cmd;
   //  self.postMessage(e.data);
 
   // DBの名前
@@ -11,13 +11,15 @@ self.addEventListener('message', function(e) {
   // 受取ったDataを変数に格納
   const journal = e.data.msg;
   // DBに接続、または無い場合には新規作成
-  let request = indexedDB.open(dbName, 2);
+  const request = indexedDB.open(dbName, 2);
 
   // DBの作成に失敗した場合
   request.addEventListener('error', function(event) {
     // エラー処理
     console.log('データベースの作成・接続に失敗');
+    self.postMessage({'cmd': 'error', 'msg': 'データベースの作成・接続に失敗しました'});
     });
+  
 
   switch (cmd) {
     case "TEST":
@@ -40,6 +42,10 @@ self.addEventListener('message', function(e) {
       // データの上書き更新
       putData(request, journal);
       break;
+    case "FIND":
+      // データを探す
+      searchData(request, journal);
+      break;
     case "READ":
       // データの読出し
       readData(request);
@@ -47,5 +53,4 @@ self.addEventListener('message', function(e) {
     default:
       break;
   };
-  
 }, false);

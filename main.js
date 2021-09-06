@@ -31,15 +31,19 @@ const journal2 = [
 const journal3 = [
   { idNum: 3, date: "2021/09/03", DrCode: 310, DrAmount: 100000, CrCode: 500, CrAmount: 100000, remarksColumn: "そのた"},
 ];
-
+const journal4 = [
+  { idNum: 3, date: "2021/09/03", DrCode: 310, DrAmount: 100000, CrCode: 500, CrAmount: 100000, remarksColumn: "そのた"},
+];
 // DataBaseにストアを作成
-worker.postMessage({'cmd': 'CREATE', 'name': DBName, 'msg': ''});
-// データをDataBaseに追記
+worker.postMessage({'cmd': 'CREATE', 'name': DBName, 'msg': 'DataBaseにストアを作成'});
+// DataBaseにデータを追記
 worker.postMessage({'cmd': 'ADD', 'name': DBName, 'msg': journal});
 worker.postMessage({'cmd': 'ADD', 'name': DBName, 'msg': journal2});
-// データをDataBaseに更新
+// DataBaseにデータを更新
 worker.postMessage({'cmd': 'PUT', 'name': DBName, 'msg': journal3});
-// // データをDataBaseから取得
+// DataBaseからデータを探す
+worker.postMessage({'cmd': 'FIND', 'name': DBName, 'msg': journal4});
+// DataBaseからデータを取得
 worker.postMessage({'cmd': 'READ', 'name': DBName, 'msg': ''});
 
 // Workerから戻って来たものを分類と実行

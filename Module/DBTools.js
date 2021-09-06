@@ -50,13 +50,13 @@ function addData(request, journal) {
       const request = ObjectStore.add(journals);
       request.addEventListener('error', function (e) {
         console.log('データベースに追記失敗');
+        self.postMessage({'cmd': 'error', 'msg': 'データベースに追記が失敗しました'});
       });
       request.addEventListener('success', function (e) {
         console.log('データベースに追記成功');
       });
     });
     db.close();
-    console.log('データベースに保存成功');
   });
 }
 
@@ -70,6 +70,7 @@ function putData(request, journal) {
     const request = ObjectStore.get(journal[0].idNum);
     request.addEventListener('error', function (e) {
       console.log("更新エラー:そのidNumはDBにありません。");
+      self.postMessage({'cmd': 'error', 'msg': '更新エラー:そのidNumはDBにありません。'});
     });
     request.addEventListener('success', function (e) {
       const request = ObjectStore.put(journal[0]);
@@ -77,9 +78,15 @@ function putData(request, journal) {
         console.log("更新が成功");
       });
     });
+    db.close();
   });
 }
 
+function searchData(request, journal) {
+  request.addEventListener('success', function (event) {
+    
+  });
+}
 
 
 function readData(request) {
@@ -98,9 +105,7 @@ function readData(request) {
 
       }
     });
-    
-      db.close();
-      console.log('データベースに保存成功');
-    }
-  );
+    db.close();
+    console.log('データベースに保存成功');
+  });
 }
