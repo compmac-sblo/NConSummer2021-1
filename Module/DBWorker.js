@@ -16,7 +16,7 @@ self.addEventListener('message', function(e) {
   // DBの作成に失敗した場合
   request.addEventListener('error', function(event) {
     // エラー処理
-    self.postMessage({'cmd': 'error', 'msg': 'データベースの作成・接続に失敗'});
+    console.log('データベースの作成・接続に失敗');
     });
 
   switch (cmd) {
@@ -35,6 +35,10 @@ self.addEventListener('message', function(e) {
     case "ADD":
       // データの追加
       addData(request, journal);
+      break;
+    case "PUT":
+      // データの上書き更新
+      putData(request, journal);
       break;
     case "READ":
       // データの読出し

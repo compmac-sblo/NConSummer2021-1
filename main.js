@@ -28,13 +28,17 @@ const journal2 = [
   { idNum: 3, date: "2021/09/03", DrCode: 300, DrAmount: 1000000, CrCode: 500, CrAmount: 1000000, remarksColumn: "そのた"},
   { idNum: 4, date: "2021/09/04", DrCode: 400, DrAmount: 1000000, CrCode: 611, CrAmount: 1000000, remarksColumn: "hoge"}
 ];
-
+const journal3 = [
+  { idNum: 3, date: "2021/09/03", DrCode: 310, DrAmount: 100000, CrCode: 500, CrAmount: 100000, remarksColumn: "そのた"},
+];
 
 // DataBaseにストアを作成
 worker.postMessage({'cmd': 'CREATE', 'name': DBName, 'msg': ''});
-// データをDataBaseに保存
+// データをDataBaseに追記
 worker.postMessage({'cmd': 'ADD', 'name': DBName, 'msg': journal});
 worker.postMessage({'cmd': 'ADD', 'name': DBName, 'msg': journal2});
+// データをDataBaseに更新
+worker.postMessage({'cmd': 'PUT', 'name': DBName, 'msg': journal3});
 // // データをDataBaseから取得
 worker.postMessage({'cmd': 'READ', 'name': DBName, 'msg': ''});
 
@@ -55,7 +59,7 @@ worker.addEventListener('message', function(e) {
     case 'db':
       console.log(e.data.msg);
       break;
-    case 'customer':
+    case 'add':
       console.log(e.data.msg);
       break;
     case 'read':
