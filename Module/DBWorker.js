@@ -53,23 +53,23 @@ self.addEventListener('message', function(e) {
       //  break;
       case "ADD":
         // データの追加
-        //self.postMessage({'cmd': 'success', 'msg': 'データの追加開始'});
         console.log('データの追加開始')
         if(addData(objectStore(db, "readwrite"), journal)){
           self.postMessage({'cmd':'success', 'msg': 'データベースに追記成功'});
         }else{
           self.postMessage({'cmd': 'error', 'msg': 'データベースに追記が失敗しました'});
         }
-        //result.addEventListener('success', function (e) {
-        //  self.postMessage({'cmd':'success', 'msg': 'データベースに追記成功'});
-        //});
-        //result.addEventListener('error', function (e) {
-        //  self.postMessage({'cmd': 'error', 'msg': 'データベースに追記が失敗しました'});
-        //});
+        db.close();
         break;
       case "PUT":
         // データの上書き更新
-        putData(objectStore(db, "readwrite"), journal);
+        console.log('データの更新開始');
+        if(putData(objectStore(db, "readwrite"), journal)){
+          self.postMessage({'cmd':'success', 'msg': 'データベースに更新成功'});
+        }else{
+          self.postMessage({'cmd': 'error', 'msg': 'データベースに更新が失敗しました'});
+        }
+        db.close();
         break;
       case "FIND":
         // データを探す

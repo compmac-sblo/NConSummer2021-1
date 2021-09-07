@@ -30,6 +30,7 @@ const journal2 = [
 ];
 const journal3 = [
   { idNum: 3, date: "2021/09/03", DrCode: 310, DrAmount: 100000, CrCode: 500, CrAmount: 100000, remarksColumn: "そのた"},
+  { idNum: 4, date: "2021/09/04", DrCode: 410, DrAmount: 100000, CrCode: 611, CrAmount: 100000, remarksColumn: "そのた"}
 ];
 const journal4 = [
   { idNum: 3, date: "2021/09/03", DrCode: 310, DrAmount: 100000, CrCode: 500, CrAmount: 100000, remarksColumn: "そのた"},

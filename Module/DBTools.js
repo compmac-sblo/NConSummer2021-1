@@ -1,17 +1,20 @@
-// createDataBase(request, journal)
-// addData(request, journal)
-// readData(request)
+// createDataBaseObjectStore(request, journal, keyPath, indexArray, db)
+// addData(objectStore, journal)
+// putData(objectStore, journal)
+// findData(objectStore, journal)
+// readData(objectStore)
 
 
 
-
-
+// 情報を保存する objectStore を作成します。
 function createDataBaseObjectStore(request, journal, keyPath, indexArray, db) {
-  // 情報を保存する objectStore を作成します。
+  
   const objectStore = db.createObjectStore("accountBook", { keyPath: keyPath });
-  console.log('KeyPath作成成功-DBTools');
-  console.log(keyPath);
-  console.log(indexArray);
+
+  //debug用
+  //console.log('KeyPath作成成功-DBTools');
+  //console.log(keyPath);
+  //console.log(indexArray);
 
   // 検索するためのインデックスを作成します。
   // 重複する可能性がありますので、一意のインデックスとしては使用できません。
@@ -22,7 +25,7 @@ function createDataBaseObjectStore(request, journal, keyPath, indexArray, db) {
   } else {
     objectStore.createIndex(indexArray, indexArray, { unique: false });
   }
-  // データを追加する前に objectStore の作成を完了させるため、
+  // objectStore の作成を完了させるため、
   // transaction oncomplete を使用します。
   objectStore.transaction.oncomplete = function(event) {
     console.log('データベースの作成完了');
@@ -30,34 +33,46 @@ function createDataBaseObjectStore(request, journal, keyPath, indexArray, db) {
   console.log('データベースにobjectStoreとKeyPath、indexの成功');
 }
 
+
+// データの追記(上書きは出来ない)
 function addData(objectStore, journal) {
-  // データの追記(上書きは出来ない)
+  
   const ObjectStore = objectStore;
   let result;
+
   journal.forEach( journals => {
-    console.log(journals);
+
+    //debug用
+    //console.log(journals);
+
     const request = ObjectStore.add(journals);
+
     if(request) { result = true; }
     else { return false; }
   });
   return result;
 }
 
+// データの更新
 function putData(objectStore, journal) {
-  // データの更新
+  
   const ObjectStore = objectStore;
-  console.log(journal[0].idNum);
-  const request = ObjectStore.get(journal[0].idNum);
-  request.addEventListener('error', function (e) {
-    console.log("更新エラー:そのidNumはDBにありません。");
-    //self.postMessage({'cmd': 'error', 'msg': '更新エラー:そのidNumはDBにありません。'});
+  let result;
+
+  journal.forEach( journals => {
+
+    //debug用
+    console.log(journals.idNum);
+    
+    const request = ObjectStore.get(journals.idNum);
+    
+    if(request) { 
+      const request2 = ObjectStore.put(journals);
+      if(request2) { result = true; }
+      else { return false; }
+    } else { return false; }
   });
-  request.addEventListener('success', function (e) {
-    const request = ObjectStore.put(journal[0]);
-    request.addEventListener('success', function (e) {
-      console.log("更新が成功");
-    });
-  });
+  return result;
 }
 
 function findData(objectStore, journal) {
