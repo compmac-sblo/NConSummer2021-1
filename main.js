@@ -36,6 +36,7 @@ const journal4 = [
 ];
 // DataBaseにストアを作成
 //worker.postMessage({'cmd': 'CREATE', 'name': DBName, 'msg': 'DataBaseにストアを作成'});
+
 // DataBaseにデータを追記
 worker.postMessage({'cmd': 'ADD', 'name': DBName, 'msg': journal});
 worker.postMessage({'cmd': 'ADD', 'name': DBName, 'msg': journal2});

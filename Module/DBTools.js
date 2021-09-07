@@ -24,29 +24,23 @@ function createDataBaseObjectStore(request, journal, keyPath, indexArray, db) {
   }
   // データを追加する前に objectStore の作成を完了させるため、
   // transaction oncomplete を使用します。
-  //objectStore.transaction.oncomplete = function(event) {
-  //  db.close();
-  //}
+  objectStore.transaction.oncomplete = function(event) {
+    console.log('データベースの作成完了');
+  }
   console.log('データベースにobjectStoreとKeyPath、indexの成功');
 }
-
-
 
 function addData(objectStore, journal) {
   // データの追記(上書きは出来ない)
   const ObjectStore = objectStore;
-  journal.forEach(function(journals) {
+  let result;
+  journal.forEach( journals => {
     console.log(journals);
-    self.postMessage({'cmd': 'add', 'msg': journals});
     const request = ObjectStore.add(journals);
-    request.addEventListener('error', function (e) {
-      console.log('データベースに追記失敗');
-      self.postMessage({'cmd': 'error', 'msg': 'データベースに追記が失敗しました'});
-    });
-    request.addEventListener('success', function (e) {
-      console.log('データベースに追記成功');
-    });
+    if(request) { result = true; }
+    else { return false; }
   });
+  return result;
 }
 
 function putData(objectStore, journal) {
@@ -56,7 +50,7 @@ function putData(objectStore, journal) {
   const request = ObjectStore.get(journal[0].idNum);
   request.addEventListener('error', function (e) {
     console.log("更新エラー:そのidNumはDBにありません。");
-    self.postMessage({'cmd': 'error', 'msg': '更新エラー:そのidNumはDBにありません。'});
+    //self.postMessage({'cmd': 'error', 'msg': '更新エラー:そのidNumはDBにありません。'});
   });
   request.addEventListener('success', function (e) {
     const request = ObjectStore.put(journal[0]);
@@ -66,21 +60,21 @@ function putData(objectStore, journal) {
   });
 }
 
-function searchData(db, journal) {
-  
+function findData(objectStore, journal) {
+  const ObjectStore = objectStore;
 }
 
 
 function readData(objectStore) {
   const ObjectStore = objectStore;
   ObjectStore.openCursor()
-                      .addEventListener('success', function (event) {
+              .addEventListener('success', function (event) {
     const cursor = event.target.result;
     if (cursor) {
-      self.postMessage({'cmd': 'read', 'msg': [cursor.key, cursor.value.name]});
+      //self.postMessage({'cmd': 'read', 'msg': [cursor.key, cursor.value.name]});
       cursor.continue();
     } else {
     }
   });
-  console.log('データベースに保存成功');
+  console.log('データベースから読出し成功');
 }
