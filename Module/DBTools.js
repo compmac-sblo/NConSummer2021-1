@@ -62,11 +62,13 @@ function putData(objectStore, journal) {
   journal.forEach( journals => {
 
     //debug用
-    console.log(journals.idNum);
-    
+    //console.log(journals.idNum);
+
+    // 更新するidNumをDataBaseから取得
     const request = ObjectStore.get(journals.idNum);
-    
+
     if(request) { 
+      // DataBaseを更新
       const request2 = ObjectStore.put(journals);
       if(request2) { result = true; }
       else { return false; }
@@ -79,17 +81,18 @@ function findData(objectStore, journal) {
   const ObjectStore = objectStore;
 }
 
-
+// 全データの読出し
 function readData(objectStore) {
   const ObjectStore = objectStore;
-  ObjectStore.openCursor()
+  let journals = [];
+  ObjectStore.getAll()
               .addEventListener('success', function (event) {
-    const cursor = event.target.result;
-    if (cursor) {
-      //self.postMessage({'cmd': 'read', 'msg': [cursor.key, cursor.value.name]});
-      cursor.continue();
-    } else {
-    }
-  });
+    console.log("Got all customers: " + event.target.result);
+    journals = event.target.result;
+    console.log(journals);
+    return journals;
+  })
   console.log('データベースから読出し成功');
+  console.log(journals);
+  return journals;
 }

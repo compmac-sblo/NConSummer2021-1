@@ -3,7 +3,7 @@ importScripts('DBTools.js');
 
 // main.jsからのpostMessageを受取る
 self.addEventListener('message', function(e) {
-  const cmd = e.data.cmd;
+  const getCmd = e.data.cmd;
   //  self.postMessage(e.data);
 
   // DBの名前
@@ -29,16 +29,19 @@ self.addEventListener('message', function(e) {
     const indexArray = ["idNum", "date", "DrCode", "DrAmount", "CrCode", "CrAmount", "remarksColumn"];
     // objectSoreの作成
     createDataBaseObjectStore(request, journal, KeyPath, indexArray, db);
+    self.postMessage({'cmd': 'success', 'msg': 'データベースにobjectStoreとKeyPath、indexの成功'});
   });
 
   
   request.addEventListener('success', function (event) {
     const db = event.target.result;
+    let setCmd = "",
+        setMsg = "";
     function objectStore(db, params) {
       return db.transaction("accountBook", params)
                 .objectStore("accountBook");
     }
-    switch (cmd) {
+    switch (getCmd) {
       case "TEST":
         self.postMessage({'cmd': 'TEST', 'msg': e.data.msg});
         break;
@@ -55,33 +58,50 @@ self.addEventListener('message', function(e) {
         // データの追加
         console.log('データの追加開始')
         if(addData(objectStore(db, "readwrite"), journal)){
-          self.postMessage({'cmd':'success', 'msg': 'データベースに追記成功'});
+          setCmd = 'success';
+          setMsg = 'データベースに追記成功';
         }else{
-          self.postMessage({'cmd': 'error', 'msg': 'データベースに追記が失敗しました'});
+          setCmd = 'error';
+          setMsg = 'データベースに追記が失敗しました';
         }
-        db.close();
         break;
       case "PUT":
         // データの上書き更新
         console.log('データの更新開始');
         if(putData(objectStore(db, "readwrite"), journal)){
-          self.postMessage({'cmd':'success', 'msg': 'データベースに更新成功'});
+          setCmd = 'success';
+          setMsg = 'データベースの更新成功';
         }else{
-          self.postMessage({'cmd': 'error', 'msg': 'データベースに更新が失敗しました'});
+          setCmd = 'error';
+          setMsg = 'データベースの更新が失敗しました';
         }
-        db.close();
         break;
       case "FIND":
         // データを探す
-        findData(objectStore(db, "readonly"), journal);
+        if(findData(objectStore(db, "readonly"), journal)){
+          setCmd = 'success';
+          setMsg = 'データベースから見つけました';
+        }else{
+          setCmd = 'error';
+          setMsg = 'データベースから見つけられませんでした';
+        }
         break;
       case "READ":
         // データの読出し
-        readData(objectStore(db, "readonly"));
+        let msg = readData(objectStore(db, 'readonly'));
+        if(msg){
+          setCmd = 'read';
+          setMsg = msg;
+        }else{
+          setCmd = 'error';
+          setMsg = 'データベースから読み出せませんでした';
+        }
+        console.log(msg);
         break;
       default:
         break;
     }
     db.close();
+    self.postMessage({'cmd': setCmd, 'msg': setMsg});
   });
 }, false);
