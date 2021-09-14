@@ -84,15 +84,17 @@ function findData(objectStore, journal) {
 // 全データの読出し
 function readData(objectStore) {
   const ObjectStore = objectStore;
-  let journals = [];
-  ObjectStore.getAll()
-              .addEventListener('success', function (event) {
-    console.log("Got all customers: " + event.target.result);
-    journals = event.target.result;
-    console.log(journals);
-    return journals;
-  })
-  console.log('データベースから読出し成功');
-  console.log(journals);
-  return journals;
+  console.log('読出し開始');
+  return new Promise((resolve, reject) => {
+    try {
+      ObjectStore.getAll()
+                  .addEventListener('success', function (event) {
+        console.log("Got all customers: " + event.target.result);
+        console.log(event.target.result); 
+        resolve(event.target.result);
+      });
+    } catch(error) {
+        reject();
+      }
+  });
 }
