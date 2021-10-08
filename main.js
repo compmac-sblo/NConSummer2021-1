@@ -8,8 +8,19 @@ test.test2();
 test.test3();
 test.test4();
 
-// DataBaseの名前
-let DBName ="the_name";
+//
+const DBobj = {
+  DBname: "the_name",
+  storeName: "accountBook",
+  setDBname: function (setName){this.DBname = setName},
+  setStoreName: function (setName){this.storeName = setName},
+  getDBname: function (){return this.DBname},
+  getStoreName: function () {return this.storeName},
+  getDBandStoreName: function () {return {DBname: this.DBname, storeName: this.storeName} }
+}
+
+
+console.log(DBobj.getDBandStoreName());
 
 // indexedDBが使用出来るかどうかの確認
 if (!window.indexedDB) {
@@ -39,36 +50,40 @@ const journal4 = [
 //worker.postMessage({'cmd': 'CREATE', 'name': DBName, 'msg': 'DataBaseにストアを作成'});
 
 // DataBaseにデータを追記
-worker.postMessage({'cmd': 'ADD', 'name': DBName, 'msg': journal});
-worker.postMessage({'cmd': 'ADD', 'name': DBName, 'msg': journal2});
+worker.postMessage({'cmd': 'ADD', 'DBobj': DBobj.getDBandStoreName(), 'msg': journal});
+worker.postMessage({'cmd': 'ADD', 'DBobj': DBobj.getDBandStoreName(), 'msg': journal2});
+
 // DataBaseにデータを更新
-worker.postMessage({'cmd': 'PUT', 'name': DBName, 'msg': journal3});
+worker.postMessage({'cmd': 'PUT', 'DBobj': DBobj.getDBandStoreName(), 'msg': journal3});
+
 // DataBaseからデータを探す
-worker.postMessage({'cmd': 'FIND', 'name': DBName, 'msg': journal4});
+worker.postMessage({'cmd': 'FIND', 'DBobj': DBobj.getDBandStoreName(), 'msg': journal4});
+
 // DataBaseからデータを取得
-worker.postMessage({'cmd': 'READ', 'name': DBName, 'msg': ''});
+worker.postMessage({'cmd': 'READ', 'DBobj': DBobj.getDBandStoreName(), 'msg': ''});
+
 
 // Workerから戻って来たものを分類と実行
 worker.addEventListener('message', function(e) {
   console.log('Worker said: ', e.data);
   const cmd = e.data.cmd;
   switch (cmd) {
-    case 'TEST':
+    case "TEST":
       console.log(e.data.msg);
       break;
-    case 'error':
+    case "error":
       console.log(e.data.msg);
       break;
-    case 'success':
+    case "success":
       console.log(e.data.msg);
       break;
-    case 'db':
+    case "db":
       console.log(e.data.msg);
       break;
-    case 'add':
+    case "add":
       console.log(e.data.msg);
       break;
-    case 'read':
+    case "read":
       console.log("読出し:" + e.data.msg);
       break;
     default:
